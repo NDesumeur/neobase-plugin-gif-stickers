@@ -1,0 +1,9 @@
+{
+  "pluginId": "neobase.gifstickers",
+  "repo": "NDesumeur/neobase-plugin-gif-stickers",
+  "version": "1.0.1",
+  "sha256": "60ea79b08125feb5cb9759060c8f172db4676806a2560e2dd1627cd97f0ee657",
+  "approvedAt": "2026-10-31T17:51:20.960Z",
+  "neobase": ">=4.0.0",
+  "signature": "mxK+yyCKp/ttJ75iA4aJL1WsXsdRh39nR1Tu53maIWsqovdE+E4kPPn58cBGyseJcGu6p2do63FR8AYr5qnEBw=="
+}
