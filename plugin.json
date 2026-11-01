@@ -1,7 +1,7 @@
 {
   "id": "neobase.gifstickers",
   "name": "GIF & stickers",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "NDesumeur",
   "description": "Une bibliothèque de GIF animés et d'images à copier en un clic, plus les stickers pixel de NeoBase.",
   "icon": "icon.png",
@@ -11,7 +11,7 @@
   "type": "app",
   "category": "Outils",
   "mobile": false,
-  "system": false,
+  "system": true,
   "dependencies": {},
   "permissions": [
     "full"
