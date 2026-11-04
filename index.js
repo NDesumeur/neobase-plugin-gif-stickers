@@ -1,6 +1,6 @@
 // GIF & stickers : ton appli d'origine (HTML et code inchangés), livrée en plugin.
 // Ses données sont dans le dossier du plugin, que NeoBase sauvegarde (synchro cloud et sauvegardes) ; à la première ouverture elle reprend ce que tu avais dans NeoBase.
-// Elle demande l'accès complet pour utiliser les outils d'interface de NeoBase. NeoBase ne l'ouvre que si elle est signée.
+// Elle tourne dans le bac à sable de NeoBase, avec ses outils d'interface (ctx.host) et seulement les autorisations de son plugin.json.
 const HTML = "";
 /*CSS-MOVED*/ const CSS = `.gfApp{display:flex;background:var(--bg0)}
 .gfApp.drop{box-shadow:inset 0 0 0 4px var(--magenta)}
@@ -42,7 +42,6 @@ export default async function (ctx) {
     return d;
   };
   const __storeSet = async (n, d) => { await folder.write(n, d); return true; };
-  const fileUrl = ctx.fileUrl;  // les fichiers de ton PC, par le serveur local de NeoBase
   // ---- ton code d'origine ----
 let tools = null, toolsTimer = null;
 const toolsReady = () => tools ? Promise.resolve(tools) : __storeGet('tools').then(d => tools = {text: {a: '', b: '', count: '', spell: '', ignore: []}, colors: {palettes: [], history: [], cur: '#e01ec8'}, gifs: {items: []}, ...(d || {})});
@@ -103,7 +102,7 @@ async function gfKeep(p, name) {
   try { const file = await p; await toolsReady(); if (!tools.gifs.items.some(i => i.file === file)) tools.gifs.items.unshift({id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), file, name: name.replace(/\.\w+$/, '').replace(/[-_]+/g, ' ').slice(0, 60), tags: [], fav: false, t: Date.now(), uses: 0}); toolsSave(); gfRender(); return true; }
   catch (e) { toast('Ajout impossible : ' + e.message.replace(/^.*Error: /, ''), true); return false; }
 }
-async function gfAddFiles(files) { let n = 0; for (const f of files) if (await gfKeep(window.neo.filesAdd('gifs', window.neo.pathOf(f)), f.name)) n++; if (n) toast(n + ' ajouté' + (n > 1 ? 's' : '')); }
+async function gfAddFiles(files) { let n = 0; for (const f of files) if (await gfKeep(window.neo.pathOf(f).then(p => window.neo.filesAdd('gifs', p)), f.name)) n++; if (n) toast(n + ' ajouté' + (n > 1 ? 's' : '')); }
 function gfAddUrl(u) {
   const g = /giphy\.com\/(?:gifs|stickers)\/(?:[\w-]*-)?(\w+)$/.exec(u.split('?')[0]);  // a Giphy page -> its GIF
   if (g) u = 'https://media.giphy.com/media/' + g[1] + '/giphy.gif';
@@ -130,7 +129,7 @@ async function gfRender() {
   gf.box.replaceChildren(...(list.length ? list.map(it => {
     const c = el('div', 'gfItem'), img = el('img'), tools2 = el('div', 'gfTools');
     img.loading = 'lazy'; img.alt = it.name; img.draggable = false;
-    if (it.art) { img.src = pixArt(it.art[0], it.art[1], 8); img.classList.add('px8'); } else img.src = fileUrl('gifs/' + it.file);
+    if (it.art) { img.src = pixArt(it.art[0], it.art[1], 8); img.classList.add('px8'); } else window.neo.filesRead('gifs', it.file).then(b64 => { img.src = 'data:' + (/\.png$/i.test(it.file) ? 'image/png' : /\.webp$/i.test(it.file) ? 'image/webp' : /\.jpe?g$/i.test(it.file) ? 'image/jpeg' : 'image/gif') + ';base64,' + b64; }, () => {});
     c.title = it.name + (it.tags?.length ? ' · #' + it.tags.join(' #') : '') + ' · clic : copier';
     c.onclick = () => gfCopy(it);
     if (!it.art) {
