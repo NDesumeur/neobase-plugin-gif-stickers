@@ -1,9 +1,9 @@
 {
-  "id": "neobase.gifstickers",
+  "id": "neodex.gifstickers",
   "name": "GIF & stickers",
   "version": "1.1.0",
   "author": "NDesumeur",
-  "description": "Une bibliothèque de GIF animés et d'images à copier en un clic, plus les stickers pixel de NeoBase.",
+  "description": "Une bibliothèque de GIF animés et d'images à copier en un clic, plus les stickers pixel de NeoDex.",
   "icon": "icon.png",
   "entry": "index.js",
   "view": "gif-stickers",

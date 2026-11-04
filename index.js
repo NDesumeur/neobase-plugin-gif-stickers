@@ -1,6 +1,6 @@
 // GIF & stickers : ton appli d'origine (HTML et code inchangés), livrée en plugin.
-// Ses données sont dans le dossier du plugin, que NeoBase sauvegarde (synchro cloud et sauvegardes) ; à la première ouverture elle reprend ce que tu avais dans NeoBase.
-// Elle tourne dans le bac à sable de NeoBase, avec ses outils d'interface (ctx.host) et seulement les autorisations de son plugin.json.
+// Ses données sont dans le dossier du plugin, que NeoDex sauvegarde (synchro cloud et sauvegardes) ; à la première ouverture elle reprend ce que tu avais dans NeoDex.
+// Elle tourne dans le bac à sable de NeoDex, avec ses outils d'interface (ctx.host) et seulement les autorisations de son plugin.json.
 const HTML = "";
 /*CSS-MOVED*/ const CSS = `.gfApp{display:flex;background:var(--bg0)}
 .gfApp.drop{box-shadow:inset 0 0 0 4px var(--magenta)}
@@ -24,10 +24,10 @@ const HTML = "";
 .gfTools button:hover{background:var(--magenta)}
 .gfTools button.on{color:#ffd07a}
 .gfEmpty{grid-column:1/-1;padding:30px;text-align:center;font-size:16px}
-`;  // le style de ce plugin (il utilise les variables du thème de NeoBase)
+`;  // le style de ce plugin (il utilise les variables du thème de NeoDex)
 export default async function (ctx) {
   const view = ctx.view;
-  if (!ctx.host) { view.textContent = "Ce plugin doit être approuvé par NeoBase pour s'ouvrir."; return; }
+  if (!ctx.host) { view.textContent = "Ce plugin doit être approuvé par NeoDex pour s'ouvrir."; return; }
   const host = ctx.host, { el, toast, sfx, ask, newTab, pixIcon, PIX, WX } = host;
   const folder = ctx.folder, legacy = ctx.legacy || {};
   ctx.host.addStyle(CSS);
@@ -65,7 +65,7 @@ const pixArt = (rows, pal, scale = 4) => {
 
 /* ==================== GIF & stickers ==================== */
 const gf = {coll: 'all', q: ''};
-// NeoBase's own stickers: the app logos and a few pixel faces, drawn big
+// NeoDex's own stickers: the app logos and a few pixel faces, drawn big
 const GF_FACES = {
   coeur: [{r: '#ff4f6d', w: '#ffd0d8'}, ['............', '..rr....rr..', '.rwrr..rrrr.', '.rwrrrrrrrr.', '.rrrrrrrrrr.', '.rrrrrrrrrr.', '..rrrrrrrr..', '...rrrrrr...', '....rrrr....', '.....rr.....', '............', '............']],
   rire: [{y: '#ffd07a', k: '#3a2a08', w: '#ffffff', p: '#ff5ad9'}, ['...oooooo...', '..oyyyyyyo..', '.oyyyyyyyyo.', 'oyykyyyykyyo', 'oykykyykykyo', 'oyyyyyyyyyyo', 'oykkkkkkkkyo', 'oyykwwwwkyyo', '.oyykppkyyo.', '..oyykkyyo..', '...oooooo...', '............']],
@@ -121,7 +121,7 @@ async function gfRender() {
   if (!gf.box) return;
   await toolsReady();
   const items = tools.gifs.items, tags = [...new Set(items.flatMap(i => i.tags))].sort((a, b) => a.localeCompare(b, 'fr'));
-  const colls = [['all', 'Tout', items.length], ['fav', '★ Favoris', items.filter(i => i.fav).length], ['recent', 'Récents', Math.min(24, items.filter(i => i.uses).length)], ['neo', 'Stickers NeoBase', gfBuiltin().length], ...tags.map(t => ['#' + t, '# ' + t, items.filter(i => i.tags.includes(t)).length])];
+  const colls = [['all', 'Tout', items.length], ['fav', '★ Favoris', items.filter(i => i.fav).length], ['recent', 'Récents', Math.min(24, items.filter(i => i.uses).length)], ['neo', 'Stickers NeoDex', gfBuiltin().length], ...tags.map(t => ['#' + t, '# ' + t, items.filter(i => i.tags.includes(t)).length])];
   gf.side.replaceChildren(el('span', 'label', 'Collections'), ...colls.map(([k, l, n]) => { const b = el('button', 'gfColl' + (gf.coll === k ? ' on' : '')); b.append(el('span', '', l), el('small', '', String(n))); b.onclick = () => { gf.coll = k; gfRender(); }; return b; }),
     el('div', 'hint', 'Pour créer une collection, ajoute un mot-clé à un GIF (bouton ✎).'));
   let list = gf.coll === 'neo' ? gfBuiltin() : gf.coll === 'fav' ? items.filter(i => i.fav) : gf.coll === 'recent' ? items.filter(i => i.uses).sort((a, b) => b.t - a.t).slice(0, 24) : gf.coll.startsWith('#') ? items.filter(i => i.tags.includes(gf.coll.slice(1))) : items;
@@ -142,7 +142,7 @@ async function gfRender() {
     }
     c.append(img, tools2, el('span', 'gfName', it.name));
     return c;
-  }) : [el('div', 'hint gfEmpty', gf.q ? 'Rien ne correspond à ta recherche.' : gf.coll === 'all' ? 'Ta bibliothèque est vide : ajoute des GIF de ton PC, colle un lien ou une image, ou pioche dans les stickers NeoBase.' : 'Rien dans cette collection pour l\'instant.')]));
+  }) : [el('div', 'hint gfEmpty', gf.q ? 'Rien ne correspond à ta recherche.' : gf.coll === 'all' ? 'Ta bibliothèque est vide : ajoute des GIF de ton PC, colle un lien ou une image, ou pioche dans les stickers NeoDex.' : 'Rien dans cette collection pour l\'instant.')]));
 }
 async function gfOpen() {
   await toolsReady(); gfRender(); $('gifsApp').focus({preventScroll: true});
