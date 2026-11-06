@@ -1,7 +1,7 @@
 {
   "id": "neodex.gifstickers",
   "name": "GIF & stickers",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "NDesumeur",
   "description": "Une bibliothèque de GIF animés et d'images à copier en un clic, plus les stickers pixel de NeoDex.",
   "icon": "icon.png",
